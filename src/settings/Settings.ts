@@ -19,6 +19,7 @@ export interface MediaDbPluginSettings {
 	wikiTemplate: string,
 	musicReleaseTemplate: string,
 	boardgameTemplate: string,
+	bookTemplate: string,
 
 	movieFileNameTemplate: string,
 	seriesFileNameTemplate: string,
@@ -26,6 +27,7 @@ export interface MediaDbPluginSettings {
 	wikiFileNameTemplate: string,
 	musicReleaseFileNameTemplate: string,
 	boardgameFileNameTemplate: string,
+	bookFileNameTemplate: string,
 
 	moviePropertyConversionRules: string,
 	seriesPropertyConversionRules: string,
@@ -33,6 +35,7 @@ export interface MediaDbPluginSettings {
 	wikiPropertyConversionRules: string,
 	musicReleasePropertyConversionRules: string,
 	boardgamePropertyConversionRules: string,
+	bookPropertyConversionRules: string,
 
 }
 
@@ -49,6 +52,7 @@ export const DEFAULT_SETTINGS: MediaDbPluginSettings = {
 	wikiTemplate: '',
 	musicReleaseTemplate: '',
 	boardgameTemplate: '',
+	bookTemplate: '',
 
 	movieFileNameTemplate: '{{ title }} ({{ year }})',
 	seriesFileNameTemplate: '{{ title }} ({{ year }})',
@@ -56,6 +60,7 @@ export const DEFAULT_SETTINGS: MediaDbPluginSettings = {
 	wikiFileNameTemplate: '{{ title }}',
 	musicReleaseFileNameTemplate: '{{ title }} (by {{ ENUM:artists }} - {{ year }})',
 	boardgameFileNameTemplate: '{{ title }} ({{ year }})',
+	bookFileNameTemplate: '{{ title }} - {{ ENUM:authors }}',
 
 	moviePropertyConversionRules: '',
 	seriesPropertyConversionRules: '',
@@ -63,6 +68,7 @@ export const DEFAULT_SETTINGS: MediaDbPluginSettings = {
 	wikiPropertyConversionRules: '',
 	musicReleasePropertyConversionRules: '',
 	boardgamePropertyConversionRules: '',
+	bookPropertyConversionRules: '',
 
 };
 
@@ -219,6 +225,19 @@ export class MediaDbSettingTab extends PluginSettingTab {
 						this.plugin.saveSettings();
 					});
 			});
+
+		new Setting(containerEl)
+		.setName('Book template')
+		.setDesc('Template file to be used when creating a new note for a book.')
+		.addSearch(cb => {
+			new FileSuggest(this.app, cb.inputEl);
+			cb.setPlaceholder('Example: bookTemplate.md')
+				.setValue(this.plugin.settings.bookTemplate)
+				.onChange(data => {
+					this.plugin.settings.bookTemplate = data;
+					this.plugin.saveSettings();
+				});
+		});
 		// endregion
 
 		containerEl.createEl('h3', {text: 'File Name Settings'});
@@ -294,6 +313,18 @@ export class MediaDbSettingTab extends PluginSettingTab {
 						this.plugin.saveSettings();
 					});
 			});
+
+		new Setting(containerEl)
+		.setName('Book file name template')
+		.setDesc('Template for the file name used when creating a new note for a book.')
+		.addText(cb => {
+			cb.setPlaceholder(`Example: ${DEFAULT_SETTINGS.bookFileNameTemplate}`)
+				.setValue(this.plugin.settings.bookFileNameTemplate)
+				.onChange(data => {
+					this.plugin.settings.bookFileNameTemplate = data;
+					this.plugin.saveSettings();
+				});
+		});
 		// endregion
 
 		containerEl.createEl('h3', {text: 'Property Mappings'});
@@ -369,6 +400,18 @@ export class MediaDbSettingTab extends PluginSettingTab {
 						this.plugin.saveSettings();
 					});
 			});
+
+		new Setting(containerEl)
+		.setName('Book model property mappings')
+		.setDesc('Mappings for the property names of a book.')
+		.addTextArea(cb => {
+			cb.setPlaceholder(`Example: \ntitle -> name\nyear -> releaseYear`)
+				.setValue(this.plugin.settings.bookPropertyConversionRules)
+				.onChange(data => {
+					this.plugin.settings.bookPropertyConversionRules = data;
+					this.plugin.saveSettings();
+				});
+		});
 		// endregion
 
 	}

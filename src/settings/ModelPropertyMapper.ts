@@ -17,6 +17,7 @@ export class ModelPropertyMapper {
 		this.conversionRulesMap.set(MediaType.Wiki, settings.wikiPropertyConversionRules);
 		this.conversionRulesMap.set(MediaType.MusicRelease, settings.musicReleasePropertyConversionRules);
 		this.conversionRulesMap.set(MediaType.BoardGame, settings.boardgamePropertyConversionRules);
+		this.conversionRulesMap.set(MediaType.Book, settings.bookPropertyConversionRules);
 	}
 
 	convertObject(obj: object): object {
